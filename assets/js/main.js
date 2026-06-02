@@ -84,54 +84,51 @@
 
   // ---------- Portfolio (page Réalisations) ----------
   var portfolio = document.getElementById("portfolio");
-  if (portfolio && Array.isArray(window.REALISATIONS)) {
+  if (portfolio) {
     var TAGS = {
       "chauffage-sanitaire": "Chauffage & Sanitaire",
       "plomberie": "Plomberie",
       "amenagement": "Aménagement",
       "toiture": "Toiture"
     };
-    var data = window.REALISATIONS;
+    var empty = document.querySelector(".portfolio__empty");
+    var data = Array.isArray(window.REALISATIONS) ? window.REALISATIONS : [];
 
     function esc(s) {
       return String(s == null ? "" : s)
         .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     }
 
-    // Construction des vignettes
-    var html = "";
-    data.forEach(function (it, i) {
-      var tag = TAGS[it.cat] || "";
-      var body = "";
-      if (tag) body += '<span class="project__tag">' + esc(tag) + "</span>";
-      if (it.titre) body += "<h3>" + esc(it.titre) + "</h3>";
-      if (it.desc) body += "<p>" + esc(it.desc) + "</p>";
-      if (it.lieu) body += '<span class="project__meta">📍 ' + esc(it.lieu) + "</span>";
+    function render() {
+      portfolio.innerHTML = data.map(function (it, i) {
+        var tag = TAGS[it.cat] || "";
+        var body = "";
+        if (tag) body += '<span class="project__tag">' + esc(tag) + "</span>";
+        if (it.titre) body += "<h3>" + esc(it.titre) + "</h3>";
+        if (it.desc) body += "<p>" + esc(it.desc) + "</p>";
+        if (it.lieu) body += '<span class="project__meta">📍 ' + esc(it.lieu) + "</span>";
+        return '<article class="project" data-category="' + esc(it.cat) + '">' +
+            '<button class="project__thumb" type="button" data-index="' + i + '" aria-label="Agrandir : ' + esc(it.alt) + '">' +
+              '<img class="project__img" src="' + esc(it.img) + '" alt="' + esc(it.alt) + '" loading="lazy" width="600" height="450">' +
+            "</button>" +
+            (body ? '<div class="project__body">' + body + "</div>" : "") +
+          "</article>";
+      }).join("");
 
-      html +=
-        '<article class="project" data-category="' + esc(it.cat) + '">' +
-          '<button class="project__thumb" type="button" data-index="' + i + '" aria-label="Agrandir : ' + esc(it.alt) + '">' +
-            '<img class="project__img" src="' + esc(it.img) + '" alt="' + esc(it.alt) + '" loading="lazy" width="600" height="450">' +
-          "</button>" +
-          (body ? '<div class="project__body">' + body + "</div>" : "") +
-        "</article>";
-    });
-    portfolio.innerHTML = html;
-
-    // Image manquante -> placeholder propre (au lieu d'une image cassée)
-    portfolio.querySelectorAll(".project__img").forEach(function (img) {
-      img.addEventListener("error", function () {
-        var ph = document.createElement("div");
-        ph.className = "project__img project__img--missing";
-        ph.textContent = "Photo à ajouter";
-        img.replaceWith(ph);
+      // Image manquante -> placeholder propre (au lieu d'une image cassée)
+      portfolio.querySelectorAll(".project__img").forEach(function (img) {
+        img.addEventListener("error", function () {
+          var ph = document.createElement("div");
+          ph.className = "project__img project__img--missing";
+          ph.textContent = "Photo à ajouter";
+          img.replaceWith(ph);
+        });
       });
-    });
 
-    var projects = portfolio.querySelectorAll(".project");
-    var empty = document.querySelector(".portfolio__empty");
+      if (empty) empty.classList.toggle("is-visible", data.length === 0);
+    }
 
-    // Filtres
+    // Filtres (délégation : survit aux re-rendus de la grille)
     var filters = document.querySelector(".filters");
     if (filters) {
       var buttons = filters.querySelectorAll(".filter-btn");
@@ -143,7 +140,7 @@
           b.setAttribute("aria-pressed", b === btn ? "true" : "false");
         });
         var shown = 0;
-        projects.forEach(function (p) {
+        portfolio.querySelectorAll(".project").forEach(function (p) {
           var match = cat === "all" || p.getAttribute("data-category") === cat;
           p.style.display = match ? "" : "none";
           if (match) shown++;
@@ -172,34 +169,30 @@
 
     function visibleIndexes() {
       var arr = [];
-      projects.forEach(function (p, i) {
+      portfolio.querySelectorAll(".project").forEach(function (p, i) {
         if (p.style.display !== "none") arr.push(i);
       });
       return arr;
     }
-
     function show(i) {
       var it = data[i];
       if (!it) return;
       current = i;
       lbImg.src = it.img;
       lbImg.alt = it.alt || "";
-      lbCap.textContent = [it.titre, it.lieu].filter(Boolean).join(" — ");
+      lbCap.textContent = [it.titre || TAGS[it.cat] || "", it.lieu].filter(Boolean).join(" — ");
     }
-
     function open(i) {
       show(i);
       lb.classList.add("is-open");
       lb.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
     }
-
     function close() {
       lb.classList.remove("is-open");
       lb.setAttribute("aria-hidden", "true");
       document.body.style.overflow = "";
     }
-
     function step(dir) {
       var vis = visibleIndexes();
       if (!vis.length) return;
@@ -223,5 +216,7 @@
       else if (e.key === "ArrowLeft") step(-1);
       else if (e.key === "ArrowRight") step(1);
     });
+
+    render();
   }
 })();
