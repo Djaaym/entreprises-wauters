@@ -187,7 +187,7 @@ h3 { font-size: 1.18rem; font-weight: 700; }
 }
 .card p { color: var(--ink-soft); font-size: .96rem; flex: 1; }
 .card__link { font-family: var(--font-display); font-weight: 700; color: var(--accent-dark); font-size: .95rem; }
-.card__link::after { content: " \2192"; }
+.card__link::after { content: " →"; }
 
 /* cards à 3 / 2 colonnes selon le contenu */
 .cards--3 { grid-template-columns: repeat(3, 1fr); }
@@ -204,7 +204,7 @@ h3 { font-size: 1.18rem; font-weight: 700; }
 .feature p { color: var(--ink-soft); font-size: .96rem; }
 .feature ul { list-style: none; display: grid; gap: 8px; margin-top: 4px; }
 .feature ul li { display: flex; gap: 10px; align-items: flex-start; color: var(--ink-soft); font-size: .95rem; }
-.feature ul li::before { content: "\2713"; color: var(--accent); font-weight: 800; flex: none; }
+.feature ul li::before { content: "✓"; color: var(--accent); font-weight: 800; flex: none; }
 
 /* prose – paragraphes de contenu */
 .prose { max-width: 70ch; }
