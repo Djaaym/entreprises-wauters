@@ -132,25 +132,33 @@
         <div id="formulaire">
           <span class="eyebrow">Formulaire</span>
           <h2>Demander un devis</h2>
-          <form class="form" style="margin-top:24px;" action="mailto:info@entreprises-wauters.be" method="post" enctype="text/plain">
+          <form class="form" id="devis-form" style="margin-top:24px;" action="https://api.web3forms.com/submit" method="POST">
+            <!-- ⚠️ REMPLACEZ par votre clé Web3Forms (voir web3forms.com) -->
+            <input type="hidden" name="access_key" value="VOTRE_CLE_ACCESS_WEB3FORMS">
+            <input type="hidden" name="subject" value="Nouvelle demande de devis — entreprises-wauters.be">
+            <input type="hidden" name="from_name" value="Site Entreprises Wauters">
+            <!-- Anti-spam (honeypot) : laissé vide par les humains, rempli par les robots -->
+            <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none !important">
+
             <div class="field">
               <label for="nom">Nom &amp; prénom</label>
-              <input type="text" id="nom" name="Nom" autocomplete="name" required>
+              <input type="text" id="nom" name="name" autocomplete="name" required>
             </div>
             <div class="field">
               <label for="email">E-mail</label>
-              <input type="email" id="email" name="Email" autocomplete="email" required>
+              <input type="email" id="email" name="email" autocomplete="email" required>
             </div>
             <div class="field">
               <label for="telephone">Téléphone</label>
-              <input type="tel" id="telephone" name="Telephone" autocomplete="tel">
+              <input type="tel" id="telephone" name="telephone" autocomplete="tel">
             </div>
             <div class="field">
               <label for="message">Votre projet / message</label>
-              <textarea id="message" name="Message" required placeholder="Décrivez votre projet ou votre demande (type de travaux, localité, délai souhaité…)"></textarea>
+              <textarea id="message" name="message" required placeholder="Décrivez votre projet ou votre demande (type de travaux, localité, délai souhaité…)"></textarea>
             </div>
             <button type="submit" class="btn btn--primary">Envoyer ma demande</button>
-            <p class="form__note">En envoyant ce formulaire, votre logiciel de messagerie s'ouvre pour finaliser l'envoi. Vous pouvez aussi nous écrire directement à <a href="mailto:info@entreprises-wauters.be">info@entreprises-wauters.be</a> ou appeler le <a href="tel:+32472640645">0472 64 06 45</a>.</p>
+            <div class="form__status" role="status" aria-live="polite"></div>
+            <p class="form__note">Nous vous répondons rapidement. Vous pouvez aussi nous écrire directement à <a href="mailto:info@entreprises-wauters.be">info@entreprises-wauters.be</a> ou appeler le <a href="tel:+32472640645">0472 64 06 45</a>.</p>
           </form>
         </div>
 
