@@ -155,6 +155,14 @@ h3 { font-size: 1.18rem; font-weight: 700; }
 .hero--page .hero__inner { padding: 64px 0 56px; }
 .hero--page h1 { font-size: clamp(1.9rem, 5vw, 3rem); }
 
+/* Hero avec photo de fond (voile sombre pour la lisibilité du texte blanc) */
+.hero--photo {
+  background:
+    linear-gradient(90deg, rgba(26,33,41,.94) 0%, rgba(26,33,41,.80) 48%, rgba(26,33,41,.50) 100%),
+    var(--hero-img, none) center / cover no-repeat;
+}
+.hero--photo::before { opacity: .10; } /* grille technique atténuée sur la photo */
+
 /* ---------- Trust bar ---------- */
 .trust { background: var(--ink); color: #fff; }
 .trust__row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; padding: 22px 0; }
