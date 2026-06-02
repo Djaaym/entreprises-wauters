@@ -313,6 +313,10 @@ h3 { font-size: 1.18rem; font-weight: 700; }
   border-radius: var(--radius); aspect-ratio: 4/3; width: 100%; height: auto;
   object-fit: cover; border: 1px solid var(--line); box-shadow: var(--shadow-s);
 }
+.media-photo.is-zoomable { cursor: zoom-in; transition: transform .18s ease, box-shadow .18s ease; }
+.media-photo.is-zoomable:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.media-photo.is-zoomable:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.project__thumb { cursor: zoom-in; }
 
 /* ---------- Zones ---------- */
 .zones { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
