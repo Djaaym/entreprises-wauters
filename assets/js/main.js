@@ -33,31 +33,146 @@
   var y = document.getElementById("year");
   if (y) y.textContent = new Date().getFullYear();
 
-  // Filtre du portfolio (page Réalisations)
-  var filters = document.querySelector(".filters");
-  var portfolio = document.querySelector(".portfolio");
-  if (filters && portfolio) {
+  // ---------- Portfolio (page Réalisations) ----------
+  var portfolio = document.getElementById("portfolio");
+  if (portfolio && Array.isArray(window.REALISATIONS)) {
+    var TAGS = {
+      "chauffage-sanitaire": "Chauffage & Sanitaire",
+      "plomberie": "Plomberie",
+      "amenagement": "Aménagement",
+      "toiture": "Toiture"
+    };
+    var data = window.REALISATIONS;
+
+    function esc(s) {
+      return String(s == null ? "" : s)
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    // Construction des vignettes
+    var html = "";
+    data.forEach(function (it, i) {
+      var tag = TAGS[it.cat] || "";
+      var body = "";
+      if (tag) body += '<span class="project__tag">' + esc(tag) + "</span>";
+      if (it.titre) body += "<h3>" + esc(it.titre) + "</h3>";
+      if (it.desc) body += "<p>" + esc(it.desc) + "</p>";
+      if (it.lieu) body += '<span class="project__meta">📍 ' + esc(it.lieu) + "</span>";
+
+      html +=
+        '<article class="project" data-category="' + esc(it.cat) + '">' +
+          '<button class="project__thumb" type="button" data-index="' + i + '" aria-label="Agrandir : ' + esc(it.alt) + '">' +
+            '<img class="project__img" src="' + esc(it.img) + '" alt="' + esc(it.alt) + '" loading="lazy" width="600" height="450">' +
+          "</button>" +
+          (body ? '<div class="project__body">' + body + "</div>" : "") +
+        "</article>";
+    });
+    portfolio.innerHTML = html;
+
+    // Image manquante -> placeholder propre (au lieu d'une image cassée)
+    portfolio.querySelectorAll(".project__img").forEach(function (img) {
+      img.addEventListener("error", function () {
+        var ph = document.createElement("div");
+        ph.className = "project__img project__img--missing";
+        ph.textContent = "Photo à ajouter";
+        img.replaceWith(ph);
+      });
+    });
+
     var projects = portfolio.querySelectorAll(".project");
     var empty = document.querySelector(".portfolio__empty");
-    var buttons = filters.querySelectorAll(".filter-btn");
 
-    filters.addEventListener("click", function (e) {
-      var btn = e.target.closest(".filter-btn");
-      if (!btn) return;
-      var cat = btn.getAttribute("data-filter");
-
-      buttons.forEach(function (b) {
-        b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+    // Filtres
+    var filters = document.querySelector(".filters");
+    if (filters) {
+      var buttons = filters.querySelectorAll(".filter-btn");
+      filters.addEventListener("click", function (e) {
+        var btn = e.target.closest(".filter-btn");
+        if (!btn) return;
+        var cat = btn.getAttribute("data-filter");
+        buttons.forEach(function (b) {
+          b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+        });
+        var shown = 0;
+        projects.forEach(function (p) {
+          var match = cat === "all" || p.getAttribute("data-category") === cat;
+          p.style.display = match ? "" : "none";
+          if (match) shown++;
+        });
+        if (empty) empty.classList.toggle("is-visible", shown === 0);
       });
+    }
 
-      var shown = 0;
-      projects.forEach(function (p) {
-        var match = cat === "all" || p.getAttribute("data-category") === cat;
-        p.style.display = match ? "" : "none";
-        if (match) shown++;
+    // ---------- Lightbox ----------
+    var lb = document.createElement("div");
+    lb.className = "lightbox";
+    lb.setAttribute("aria-hidden", "true");
+    lb.innerHTML =
+      '<button class="lightbox__close" type="button" aria-label="Fermer">✕</button>' +
+      '<button class="lightbox__nav lightbox__prev" type="button" aria-label="Précédent">‹</button>' +
+      '<figure class="lightbox__figure">' +
+        '<img class="lightbox__img" src="" alt="">' +
+        '<figcaption class="lightbox__caption"></figcaption>' +
+      "</figure>" +
+      '<button class="lightbox__nav lightbox__next" type="button" aria-label="Suivant">›</button>';
+    document.body.appendChild(lb);
+
+    var lbImg = lb.querySelector(".lightbox__img");
+    var lbCap = lb.querySelector(".lightbox__caption");
+    var current = 0;
+
+    function visibleIndexes() {
+      var arr = [];
+      projects.forEach(function (p, i) {
+        if (p.style.display !== "none") arr.push(i);
       });
+      return arr;
+    }
 
-      if (empty) empty.classList.toggle("is-visible", shown === 0);
+    function show(i) {
+      var it = data[i];
+      if (!it) return;
+      current = i;
+      lbImg.src = it.img;
+      lbImg.alt = it.alt || "";
+      lbCap.textContent = [it.titre, it.lieu].filter(Boolean).join(" — ");
+    }
+
+    function open(i) {
+      show(i);
+      lb.classList.add("is-open");
+      lb.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function close() {
+      lb.classList.remove("is-open");
+      lb.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+
+    function step(dir) {
+      var vis = visibleIndexes();
+      if (!vis.length) return;
+      var pos = vis.indexOf(current);
+      pos = (pos + dir + vis.length) % vis.length;
+      show(vis[pos]);
+    }
+
+    portfolio.addEventListener("click", function (e) {
+      var thumb = e.target.closest(".project__thumb");
+      if (!thumb) return;
+      open(parseInt(thumb.getAttribute("data-index"), 10));
+    });
+    lb.querySelector(".lightbox__close").addEventListener("click", close);
+    lb.querySelector(".lightbox__prev").addEventListener("click", function () { step(-1); });
+    lb.querySelector(".lightbox__next").addEventListener("click", function () { step(1); });
+    lb.addEventListener("click", function (e) { if (e.target === lb) close(); });
+    document.addEventListener("keydown", function (e) {
+      if (!lb.classList.contains("is-open")) return;
+      if (e.key === "Escape") close();
+      else if (e.key === "ArrowLeft") step(-1);
+      else if (e.key === "ArrowRight") step(1);
     });
   }
 })();

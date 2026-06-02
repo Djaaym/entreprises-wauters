@@ -264,6 +264,42 @@ h3 { font-size: 1.18rem; font-weight: 700; }
 .portfolio__empty { display: none; color: var(--ink-soft); margin-top: 28px; }
 .portfolio__empty.is-visible { display: block; }
 
+/* vignette cliquable */
+.project__thumb { border: 0; padding: 0; margin: 0; background: none; cursor: pointer; display: block; width: 100%; }
+.project__thumb:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.project__img--missing {
+  aspect-ratio: 4/3; display: grid; place-items: center;
+  color: #8e99a6; font-size: .8rem; text-align: center; padding: 16px;
+}
+
+/* ---------- Lightbox ---------- */
+.lightbox {
+  display: none; position: fixed; inset: 0; z-index: 100;
+  background: rgba(15, 19, 24, .92);
+  align-items: center; justify-content: center; padding: 24px;
+}
+.lightbox.is-open { display: flex; }
+.lightbox__figure { margin: 0; max-width: 92vw; max-height: 88vh; text-align: center; }
+.lightbox__img {
+  max-width: 92vw; max-height: 78vh; width: auto; height: auto;
+  border-radius: var(--radius); box-shadow: 0 20px 60px rgba(0,0,0,.5);
+}
+.lightbox__caption { color: #E4E7EB; margin-top: 14px; font-size: .95rem; font-weight: 600; }
+.lightbox__close, .lightbox__nav {
+  position: absolute; background: rgba(255,255,255,.1); color: #fff;
+  border: 1px solid rgba(255,255,255,.25); border-radius: 50%;
+  width: 52px; height: 52px; font-size: 1.6rem; line-height: 1; cursor: pointer;
+  display: grid; place-items: center; transition: background .15s ease;
+}
+.lightbox__close:hover, .lightbox__nav:hover { background: rgba(255,255,255,.22); }
+.lightbox__close { top: 18px; right: 18px; font-size: 1.2rem; }
+.lightbox__prev { left: 18px; top: 50%; transform: translateY(-50%); }
+.lightbox__next { right: 18px; top: 50%; transform: translateY(-50%); }
+@media (max-width: 600px) {
+  .lightbox__prev { left: 8px; } .lightbox__next { right: 8px; }
+  .lightbox__nav { width: 44px; height: 44px; }
+}
+
 /* ---------- Zones ---------- */
 .zones { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
 .zone {

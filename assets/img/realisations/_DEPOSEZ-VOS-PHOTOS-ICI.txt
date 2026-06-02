@@ -1,0 +1,5 @@
+Déposez ici vos photos de réalisations (jpg ou webp, sans accents ni espaces
+dans le nom : ex. salle-bain-01.jpg).
+
+Ensuite, déclarez chaque photo dans : assets/js/realisations-data.js
+(un petit bloc par photo). La page /realisations/ se met à jour toute seule.
