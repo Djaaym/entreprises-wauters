@@ -137,6 +137,7 @@ h3 { font-size: 1.18rem; font-weight: 700; }
   background-size: 38px 38px;
 }
 .hero__inner { position: relative; padding: 92px 0 84px; max-width: 760px; }
+.hero__inner > * { min-width: 0; }
 .hero h1 { font-size: clamp(2.1rem, 6vw, 3.5rem); color: #fff; }
 .hero h1 .accent { color: var(--accent); }
 .hero__sub { margin: 20px 0 28px; font-size: 1.12rem; color: #D5DBE2; max-width: 56ch; }
@@ -422,14 +423,34 @@ a.zone:hover { border-color: var(--accent); color: var(--accent-dark); }
   }
   .nav.is-open a { padding: 13px 0; border-bottom: 1px solid var(--line); font-size: 1.02rem; }
 
-  .section { padding: 52px 0; }
-  .footer__grid { grid-template-columns: 1fr; }
-  body { padding-bottom: 64px; } /* room for call bar */
+  .section { padding: 48px 0; }
+  .section__head { margin-bottom: 32px; }
+  .footer__grid { grid-template-columns: 1fr; gap: 28px; }
+  body { padding-bottom: 76px; } /* room for call bar */
+
+  /* Hero : moins d'espace vertical sur mobile */
+  .hero__inner { padding: 52px 0 56px; }
+  .hero--page .hero__inner { padding: 44px 0 44px; }
+  .hero__sub { margin: 16px 0 24px; }
+  .hero__stats { gap: 22px 32px; margin-top: 32px; }
+
+  /* CTA : boutons pleine largeur et empilés pour de meilleures cibles tactiles */
+  .hero__actions { flex-direction: column; align-items: stretch; }
+  .hero__actions .btn { width: 100%; justify-content: center; }
+
+  .cta-inline { flex-direction: column; align-items: stretch; gap: 12px; padding: 20px; }
+  .cta-inline p { margin-right: 0; }
+  .cta-inline .btn { width: 100%; justify-content: center; }
+
+  .ctaband__inner { padding: 40px 0; gap: 22px; }
+  .ctaband__actions { flex-direction: column; align-items: stretch; width: 100%; }
+  .ctaband__actions .btn { width: 100%; justify-content: center; }
 
   .mobilebar {
     display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
     background: #fff; border-top: 1px solid var(--line); padding: 10px 14px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
     box-shadow: 0 -6px 20px rgba(31,41,51,.1);
   }
   .mobilebar .btn { width: 100%; justify-content: center; padding: 13px; }
@@ -437,11 +458,16 @@ a.zone:hover { border-color: var(--accent); color: var(--accent-dark); }
 
 @media (max-width: 420px) {
   .cards, .cards--3, .cards--2 { grid-template-columns: 1fr; }
-  .trust__row { grid-template-columns: 1fr; }
+  .trust__row { grid-template-columns: 1fr; gap: 12px; }
   .gallery { grid-template-columns: 1fr; }
   .portfolio { grid-template-columns: 1fr; }
   .container { padding: 0 18px; }
   .logo__img { height: 30px; }
+
+  .card { padding: 22px 18px; }
+  .contact-card { padding: 18px; gap: 12px; }
+  .form { padding: 22px 18px; }
+  .hero__stats { gap: 18px 28px; }
 }
 
 /* reduce motion */
