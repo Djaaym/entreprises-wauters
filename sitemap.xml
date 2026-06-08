@@ -36,6 +36,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://entreprises-wauters.be/postuler/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://entreprises-wauters.be/zones/grez-doiceau/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
