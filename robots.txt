@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /suivi/
 
 Sitemap: https://entreprises-wauters.be/sitemap.xml
