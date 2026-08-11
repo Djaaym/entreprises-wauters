@@ -1,1 +1,5 @@
 *.zip
+
+# Données de suivi et mot de passe du tableau de bord : propres au serveur,
+# jamais versionnés.
+suivi/data/

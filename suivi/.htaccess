@@ -1,0 +1,20 @@
+# Le dossier de données ne doit jamais être servi directement.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^data/ - [F,L]
+</IfModule>
+
+<FilesMatch "\.(jsonl|bin|log)$">
+  Require all denied
+  <IfModule !mod_authz_core.c>
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+# Ces fichiers sont inclus par index.php, pas destinés à être appelés directement.
+<FilesMatch "^(lib|auth|agregation)\.php$">
+  Require all denied
+  <IfModule !mod_authz_core.c>
+    Deny from all
+  </IfModule>
+</FilesMatch>
