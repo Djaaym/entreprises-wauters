@@ -84,6 +84,9 @@ if (!suivi_est_connecte()) {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="../favicon.ico" sizes="32x32">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#1F2933">
 <title>Suivi — Entreprises Wauters</title>
 <style>
   :root { --ink:#1F2933; --accent:#E8772E; --line:#E4E7EB; --muted:#8A94A6; }
@@ -252,6 +255,9 @@ $filtreActif = implode('', $filtres) !== '';
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="../favicon.ico" sizes="32x32">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#1F2933">
 <title>Suivi du site — Entreprises Wauters</title>
 <style>
   :root {
